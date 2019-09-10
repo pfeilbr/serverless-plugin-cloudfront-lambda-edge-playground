@@ -15,18 +15,22 @@ aws s3 cp public s3://pfeil-static-site-pfeilbr/ --recursive
 # aws s3 cp public s3://pfeil-static-site-pfeilbr/ --recursive --acl public-read
 
 # bucket
+# not accessible because of Origin Access Identity applied
 open http://pfeil-static-site-pfeilbr.s3-website-us-east-1.amazonaws.com/index.html
 
 # cloudfront url
 open https://d13ydba49ilc9v.cloudfront.net
 ```
 
-## TODO
+## Viewing CloudWatch Logs for Lambda@Edge Functions
 
-* add origin access identity
-    * see the following for cfn markup <https://github.com/lroguet/amzn-cloudformation/blob/master/storage-content-delivery/static-website-with-cloudfront.yml>
-    * [Restricting Access to Amazon S3 Content by Using an Origin Access Identity](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html)
-* S3 Bucket | [Granting Permission to an Amazon CloudFront Origin Identity](https://docs.aws.amazon.com/AmazonS3/latest/dev/example-bucket-policies.html#example-bucket-policies-use-case-6)
+logging takes place in the region of the edge (PoP) location.  This will vary based on the client location.
+
+Visit CloudFront | Monitoring | Lambda@Edge Functions | YOUR FUNCTION, then click `[View Function Metrics]` button
+
+see [Determining the Lambda@Edge Region](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-testing-debugging.html#lambda-edge-testing-debugging-determine-region) for more details
+
+![](https://www.evernote.com/l/AAH3ZzTj929MNqiRZIcn1zj1G0WzeI5ZSGQB/image.png)
 
 ## Lambda@Edge Request
 
@@ -128,3 +132,10 @@ open https://d13ydba49ilc9v.cloudfront.net
     }
 }
 ```
+
+## Resources
+
+* add origin access identity
+    * see the following for cfn markup <https://github.com/lroguet/amzn-cloudformation/blob/master/storage-content-delivery/static-website-with-cloudfront.yml>
+    * [Restricting Access to Amazon S3 Content by Using an Origin Access Identity](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html)
+* S3 Bucket | [Granting Permission to an Amazon CloudFront Origin Identity](https://docs.aws.amazon.com/AmazonS3/latest/dev/example-bucket-policies.html#example-bucket-policies-use-case-6)
