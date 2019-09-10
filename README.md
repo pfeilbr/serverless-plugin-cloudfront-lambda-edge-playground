@@ -9,7 +9,10 @@ learn [silvermine/serverless-plugin-cloudfront-lambda-edge](https://github.com/s
 ./node_modules/.bin/sls deploy
 
 # copy static assets to bucket
-aws s3 cp public s3://pfeil-static-site-pfeilbr/ --recursive --acl public-read
+aws s3 cp public s3://pfeil-static-site-pfeilbr/ --recursive
+
+# for public access
+# aws s3 cp public s3://pfeil-static-site-pfeilbr/ --recursive --acl public-read
 
 # bucket
 open http://pfeil-static-site-pfeilbr.s3-website-us-east-1.amazonaws.com/index.html

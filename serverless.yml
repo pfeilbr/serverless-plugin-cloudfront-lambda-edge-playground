@@ -42,7 +42,7 @@ resources:
       Type: "AWS::S3::Bucket"
       Properties:
         BucketName: "${self:custom.objectPrefix}"
-        AccessControl: "PublicRead"
+        AccessControl: "Private"
         WebsiteConfiguration:
           IndexDocument: "index.html"
           ErrorDocument: "error.html"
@@ -69,8 +69,36 @@ resources:
           Origins:
             - Id: "WebsiteBucketOrigin"
               DomainName: { "Fn::GetAtt": ["WebsiteBucket", "DomainName"] }
-              S3OriginConfig: {}
+              S3OriginConfig:
+                OriginAccessIdentity:
+                  Fn::Join:
+                    - ""
+                    - - "origin-access-identity/cloudfront/"
+                      - Ref: "CloudFrontOriginAccessIdentity"
               ## In case you want to restrict the bucket access use S3OriginConfig and remove CustomOriginConfig
               # S3OriginConfig:
               #   OriginAccessIdentity: origin-access-identity/cloudfront/E127EXAMPLE51Z
 
+    CloudFrontOriginAccessIdentity:
+      Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+      Properties:
+        CloudFrontOriginAccessIdentityConfig:
+          Comment: "${self:custom.objectPrefix}"
+
+    BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref WebsiteBucket
+        PolicyDocument:
+          Statement:
+            - Action:
+                - s3:GetObject
+              Effect: Allow
+              Resource:
+                Fn::Join:
+                  - ""
+                  - - "arn:aws:s3:::"
+                    - Ref: "WebsiteBucket"
+                    - "/*"
+              Principal:
+                CanonicalUser: !GetAtt CloudFrontOriginAccessIdentity.S3CanonicalUserId

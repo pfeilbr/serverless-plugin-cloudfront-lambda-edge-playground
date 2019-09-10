@@ -1,5 +1,9 @@
 "use strict";
-exports.handler = (event, context, callback) => {
+
+const log = o => console.log(JSON.stringify(o));
+
+exports.handler = async (event, context, callback) => {
+  log({ event });
   // Get request and request headers
   const request = event.Records[0].cf.request;
   const headers = request.headers;
@@ -26,9 +30,9 @@ exports.handler = (event, context, callback) => {
         "www-authenticate": [{ key: "WWW-Authenticate", value: "Basic" }]
       }
     };
-    callback(null, response);
+    return response;
+  } else {
+    // Continue request processing if authentication passed
+    return request;
   }
-
-  // Continue request processing if authentication passed
-  callback(null, request);
 };
