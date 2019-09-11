@@ -2,7 +2,7 @@
 
 learn [silvermine/serverless-plugin-cloudfront-lambda-edge](https://github.com/silvermine/serverless-plugin-cloudfront-lambda-edge)
 
-visit <https://d13ydba49ilc9v.cloudfront.net/>
+visit <https://d2fsr6lqmm7zhb.cloudfront.net>
 
 **Basic Auth Challenge**
 
@@ -19,6 +19,11 @@ users are stored in aws secrets manager
 # deploy all
 npm run deploy
 
+npm run deploy-infrastructure
+npm run build-static-site
+npm run publish-static-assets-to-bucket
+npm run cloudfront:invalidate
+
 # deploy function only
 ./node_modules/.bin/sls deploy function -f directoryRootOriginRequestRewriter
 
@@ -33,8 +38,6 @@ aws s3 cp static-site/public s3://pfeil-static-site-dev/ --recursive
 open http://pfeil-static-site-dev.s3-website-us-east-1.amazonaws.com/index.html
 
 # cloudfront url
-open https://d13ydba49ilc9v.cloudfront.net
-
 open https://d2fsr6lqmm7zhb.cloudfront.net
 ```
 

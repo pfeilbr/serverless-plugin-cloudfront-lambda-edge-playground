@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "sls deploy"
+    "deploy": "npm run deploy-infrastructure && npm run build-static-site && npm run publish-static-assets-to-bucket && npm run cloudfront:invalidate",
+    "deploy-infrastructure": "sls deploy",
+    "build-static-site": "pushd static-site && npm run build && popd",
+    "publish-static-assets-to-bucket": "aws s3 cp static-site/public s3://pfeil-static-site-dev/ --recursive",
+    "cloudfront:invalidate": "aws cloudfront create-invalidation --distribution-id E1ZQSLID3J234M --paths \"/*\""
   },
   "keywords": [],
   "author": "",
