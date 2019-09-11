@@ -2,7 +2,7 @@
 
 learn [silvermine/serverless-plugin-cloudfront-lambda-edge](https://github.com/silvermine/serverless-plugin-cloudfront-lambda-edge)
 
-example @ <https://d13ydba49ilc9v.cloudfront.net/>
+visit <https://d13ydba49ilc9v.cloudfront.net/>
 
 **Basic Auth Challenge**
 
@@ -10,6 +10,8 @@ example @ <https://d13ydba49ilc9v.cloudfront.net/>
 username: user01
 password: password01
 ```
+
+users are stored in aws secrets manager
 
 ## Usage
 
