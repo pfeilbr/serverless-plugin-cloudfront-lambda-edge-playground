@@ -52,7 +52,7 @@ resources:
         AccessControl: "Private"
         WebsiteConfiguration:
           IndexDocument: "index.html"
-          ErrorDocument: "error.html"
+          ErrorDocument: "404.html"
     WebsiteDistribution:
       Type: "AWS::CloudFront::Distribution"
       Properties:
