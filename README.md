@@ -36,6 +36,10 @@ open http://pfeil-static-site-pfeilbr.s3-website-us-east-1.amazonaws.com/index.h
 open https://d13ydba49ilc9v.cloudfront.net
 ```
 
+## Removing Auth
+
+Update CloudFront Behavior to remove "Viewer Request" "Lambda Function Association", then invalidate cache on all "*".
+
 ## Viewing CloudWatch Logs for Lambda@Edge Functions
 
 logging takes place in the region of the edge (PoP) location.  This will vary based on the client location.
