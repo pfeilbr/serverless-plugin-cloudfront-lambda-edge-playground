@@ -23,17 +23,19 @@ npm run deploy
 ./node_modules/.bin/sls deploy function -f directoryRootOriginRequestRewriter
 
 # copy static assets to bucket
-aws s3 cp static-site/public s3://pfeil-static-site-pfeilbr/ --recursive
+aws s3 cp static-site/public s3://pfeil-static-site-dev/ --recursive
 
 # for public access
-# aws s3 cp public s3://pfeil-static-site-pfeilbr/ --recursive --acl public-read
+# aws s3 cp public s3://pfeil-static-site-dev/ --recursive --acl public-read
 
 # bucket
 # not accessible because of Origin Access Identity applied
-open http://pfeil-static-site-pfeilbr.s3-website-us-east-1.amazonaws.com/index.html
+open http://pfeil-static-site-dev.s3-website-us-east-1.amazonaws.com/index.html
 
 # cloudfront url
 open https://d13ydba49ilc9v.cloudfront.net
+
+open https://d2fsr6lqmm7zhb.cloudfront.net
 ```
 
 ## Removing Auth

@@ -4,7 +4,7 @@ const AWS = require("aws-sdk");
 const secretsmanager = new AWS.SecretsManager();
 
 const log = o => console.log(JSON.stringify(o));
-const USERS_SECRET_NAME = "dev/pfeil-static-site-pfeilbr/users";
+const USERS_SECRET_NAME = "pfeil-static-site-dev";
 
 // cache expensive operation of loading users from secrets manager
 let userAuthStrings = null;

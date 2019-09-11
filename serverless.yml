@@ -4,7 +4,7 @@ custom:
   defaultRegion: us-east-1
   defaultEnvironmentGroup: dev
   region: ${opt:region, self:custom.defaultRegion}
-  stage: ${opt:stage, env:USER}
+  stage: ${opt:stage, "dev"}
   objectPrefix: "${self:service}-${self:custom.stage}"
 
 plugins:
@@ -14,6 +14,7 @@ plugins:
 package:
   exclude:
     - "node_modules/**"
+    - "static-site/**"
 
 provider:
   name: aws
@@ -25,7 +26,7 @@ provider:
     - Effect: "Allow"
       Action:
         - "secretsmanager:GetSecretValue"
-      Resource: "arn:aws:secretsmanager:#{AWS::Region}:#{AWS::AccountId}:secret:dev/pfeil-static-site-pfeilbr/users-*"
+      Resource: "arn:aws:secretsmanager:#{AWS::Region}:#{AWS::AccountId}:secret:${self:custom.objectPrefix}*"
 
   # Note that Lambda@Edge does not actually support environment variables for lambda
   # functions, but the plugin will strip the environment variables from any function
@@ -46,6 +47,13 @@ functions:
 
 resources:
   Resources:
+    UsersSecret:
+      Type: "AWS::SecretsManager::Secret"
+      Properties:
+        Name: "${self:custom.objectPrefix}"
+        Description: users credentials store
+        SecretString: ${file(users.js):users}
+
     WebsiteBucket:
       Type: "AWS::S3::Bucket"
       Properties:
@@ -54,6 +62,7 @@ resources:
         WebsiteConfiguration:
           IndexDocument: "index.html"
           ErrorDocument: "404.html"
+
     WebsiteDistribution:
       Type: "AWS::CloudFront::Distribution"
       Properties:
@@ -83,9 +92,6 @@ resources:
                     - ""
                     - - "origin-access-identity/cloudfront/"
                       - Ref: "CloudFrontOriginAccessIdentity"
-              ## In case you want to restrict the bucket access use S3OriginConfig and remove CustomOriginConfig
-              # S3OriginConfig:
-              #   OriginAccessIdentity: origin-access-identity/cloudfront/E127EXAMPLE51Z
 
     CloudFrontOriginAccessIdentity:
       Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
