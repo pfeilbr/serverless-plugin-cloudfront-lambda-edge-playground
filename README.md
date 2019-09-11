@@ -12,7 +12,7 @@ npm run deploy
 ./node_modules/.bin/sls deploy function -f directoryRootOriginRequestRewriter
 
 # copy static assets to bucket
-aws s3 cp public s3://pfeil-static-site-pfeilbr/ --recursive
+aws s3 cp static-site/public s3://pfeil-static-site-pfeilbr/ --recursive
 
 # for public access
 # aws s3 cp public s3://pfeil-static-site-pfeilbr/ --recursive --acl public-read
