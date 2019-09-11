@@ -165,4 +165,5 @@ see [Determining the Lambda@Edge Region](https://docs.aws.amazon.com/AmazonCloud
     * see https://www.brautaset.org/articles/2017/route-53-cloudformation.html.  Contains ApexRecordSet (example.com) and WwwRecordSet (www.example.com)
     * [Alias Resource Record Set for a CloudFront Distribution](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-route53.html#w2ab1c17c23c81c11)
 * update `serverless.yml:iamRoleStatements` with dynamic region, account id, and secretsmanager name
+    * via [serverless-pseudo-parameters](https://github.com/svdgraaf/serverless-pseudo-parameters#readme) plugin
 
