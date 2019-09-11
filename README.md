@@ -160,4 +160,9 @@ see [Determining the Lambda@Edge Region](https://docs.aws.amazon.com/AmazonCloud
 
 ## TODO
 
+* DNS (route 53)
+    * [Routing Traffic to an Amazon CloudFront Web Distribution by Using Your Domain Name](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-cloudfront-distribution.html).  Covers [root|sub]domainsG
+    * see https://www.brautaset.org/articles/2017/route-53-cloudformation.html.  Contains ApexRecordSet (example.com) and WwwRecordSet (www.example.com)
+    * [Alias Resource Record Set for a CloudFront Distribution](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-route53.html#w2ab1c17c23c81c11)
 * update `serverless.yml:iamRoleStatements` with dynamic region, account id, and secretsmanager name
+
