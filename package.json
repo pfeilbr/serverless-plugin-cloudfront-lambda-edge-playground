@@ -13,5 +13,8 @@
   "devDependencies": {
     "@silvermine/serverless-plugin-cloudfront-lambda-edge": "2.1.1",
     "serverless": "^1.51.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.526.0"
   }
 }

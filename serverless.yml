@@ -19,7 +19,14 @@ provider:
   runtime: nodejs8.10 # Because this runs on CloudFront (lambda@edge) it must be 6.10 or greater
   region: ${self:custom.region}
   stage: ${self:custom.stage}
-  # Note that Lambda@Edge does not actually support environment variables for lambda
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "secretsmanager:GetSecretValue"
+      Resource: "arn:aws:secretsmanager:us-east-1:529276214230:secret:dev/pfeil-static-site-pfeilbr/users-*"
+
+      # Note that Lambda@Edge does not actually support environment variables for lambda
   # functions, but the plugin will strip the environment variables from any function
   # that has edge configuration on it
   environment:
@@ -31,7 +38,7 @@ functions:
     name: "${self:custom.objectPrefix}-origin-request"
     handler: index.handler
     memorySize: 128
-    timeout: 1
+    timeout: 5
     lambdaAtEdge:
       distribution: "WebsiteDistribution"
       eventType: "viewer-request"
