@@ -16,11 +16,12 @@ users are stored in aws secrets manager
 ## Usage
 
 ```sh
-# deploy all
+# deploy all (provision infra, build static site, copy to s3, invalidate cache).
 npm run deploy
 
+# separate component deploys
 npm run deploy-infrastructure
-npm run build-static-site
+npm run build-static-site # gatsby
 npm run publish-static-assets-to-bucket
 npm run cloudfront:invalidate
 
