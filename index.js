@@ -34,14 +34,6 @@ exports.handler = async (event, context, callback) => {
   const request = event.Records[0].cf.request;
   const headers = request.headers;
 
-  // Configure authentication
-  const authUser = "user";
-  const authPass = "pass";
-
-  // Construct the Basic Auth string
-  const authString =
-    "Basic " + new Buffer(authUser + ":" + authPass).toString("base64");
-
   // Require Basic authentication
   if (
     typeof headers.authorization == "undefined" ||

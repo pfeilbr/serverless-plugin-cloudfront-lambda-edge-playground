@@ -2,6 +2,15 @@
 
 learn [silvermine/serverless-plugin-cloudfront-lambda-edge](https://github.com/silvermine/serverless-plugin-cloudfront-lambda-edge)
 
+example @ <https://d13ydba49ilc9v.cloudfront.net/>
+
+**Basic Auth Challenge**
+
+```
+username: user01
+password: password01
+```
+
 ## Usage
 
 ```sh
