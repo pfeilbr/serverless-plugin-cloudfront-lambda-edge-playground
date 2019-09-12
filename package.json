@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "npm run deploy-infrastructure && npm run build-static-site && npm run publish-static-assets-to-bucket && npm run cloudfront:invalidate",
+    "deploy": "npm run deploy-infrastructure && npm run build-and-deploy-static-site",
     "deploy-infrastructure": "sls deploy",
+    "build-and-deploy-static-site": "npm run build-static-site && npm run publish-static-assets-to-bucket && npm run cloudfront:invalidate",
     "build-static-site": "pushd static-site && npm run build && popd",
     "publish-static-assets-to-bucket": "aws s3 cp static-site/public s3://pfeil-static-site-dev/ --recursive",
     "cloudfront:invalidate": "aws cloudfront create-invalidation --distribution-id E1ZQSLID3J234M --paths \"/*\""
