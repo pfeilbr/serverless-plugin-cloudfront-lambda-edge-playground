@@ -2,7 +2,7 @@
 
 learn [silvermine/serverless-plugin-cloudfront-lambda-edge](https://github.com/silvermine/serverless-plugin-cloudfront-lambda-edge)
 
-visit <https://d2fsr6lqmm7zhb.cloudfront.net>
+visit <https://d3cztrjc4xcpde.cloudfront.net> and login with user01/password01
 
 **Basic Auth Challenge**
 
@@ -11,7 +11,7 @@ username: user01
 password: password01
 ```
 
-users are stored in aws secrets manager
+users are stored in aws secrets manager and sourced from [`users.json`](users.json)
 
 ## Usage
 
@@ -25,21 +25,13 @@ npm run build-static-site # gatsby
 npm run publish-static-assets-to-bucket
 npm run cloudfront:invalidate
 
-# deploy function only
-./node_modules/.bin/sls deploy function -f directoryRootOriginRequestRewriter
-
-# copy static assets to bucket
-aws s3 cp static-site/public s3://pfeil-static-site-dev/ --recursive
-
-# for public access
-# aws s3 cp public s3://pfeil-static-site-dev/ --recursive --acl public-read
-
 # bucket
 # not accessible because of Origin Access Identity applied
-open http://pfeil-static-site-dev.s3-website-us-east-1.amazonaws.com/index.html
+# e.g. http://s3-cf-private-static-site-01-dev.s3-website-us-east-1.amazonaws.com
+open "http://$(node scripts/get-stack-property.js WebsiteBucketName).s3-website-us-east-1.amazonaws.com/index.html"
 
-# cloudfront url
-open https://d2fsr6lqmm7zhb.cloudfront.net
+# cloudfront url. e.g. https://d3cztrjc4xcpde.cloudfront.net
+open "https://$(node scripts/get-stack-property.js CloudFrontDistributionDomainName)"
 ```
 
 ## Removing Auth
