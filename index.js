@@ -2,9 +2,17 @@
 
 const AWS = require("aws-sdk");
 const secretsmanager = new AWS.SecretsManager();
+const fs = require("fs");
 
 const log = o => console.log(JSON.stringify(o));
-const USERS_SECRET_NAME = "pfeil-static-site-dev";
+
+const USERS_SECRET_NAME = fs
+  .readFileSync("config/users-secret-name.txt", {
+    encoding: "utf8"
+  })
+  .trim();
+
+log({ USERS_SECRET_NAME });
 
 // cache expensive operation of loading users from secrets manager
 let userAuthStrings = null;

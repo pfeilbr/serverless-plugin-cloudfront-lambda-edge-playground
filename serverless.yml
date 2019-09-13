@@ -1,4 +1,4 @@
-service: pfeil-static-site
+service: s3-cf-private-static-site-01
 
 custom:
   defaultRegion: us-east-1
@@ -6,10 +6,21 @@ custom:
   region: ${opt:region, self:custom.defaultRegion}
   stage: ${opt:stage, "dev"}
   objectPrefix: "${self:service}-${self:custom.stage}"
+  cloudFrontLogsBucketName: "${self:custom.objectPrefix}-cloudfront-logs"
+
+  scripts:
+    hooks:
+      "package:initialize": mkdir config; echo "${self:custom.objectPrefix}" > config/users-secret-name.txt
+
+  output:
+    # handler: scripts/output.handler # Same syntax as you already know
+    file: .build/stack.json # toml, yaml, yml, and json format is available
 
 plugins:
   - "@silvermine/serverless-plugin-cloudfront-lambda-edge"
   - serverless-pseudo-parameters
+  - serverless-stack-output
+  - serverless-plugin-scripts
 
 package:
   exclude:
@@ -36,8 +47,8 @@ provider:
     SLS_STAGE: ${self:custom.stage}
 
 functions:
-  directoryRootOriginRequestRewriter:
-    name: "${self:custom.objectPrefix}-origin-request"
+  cloudFrontViewerRequest:
+    name: "${self:custom.objectPrefix}-viewer-request"
     handler: index.handler
     memorySize: 128
     timeout: 5
@@ -63,6 +74,11 @@ resources:
           IndexDocument: "index.html"
           ErrorDocument: "404.html"
 
+    CloudFrontLogsBucket:
+      Type: "AWS::S3::Bucket"
+      Properties:
+        BucketName: "${self:custom.cloudFrontLogsBucketName}"
+
     WebsiteDistribution:
       Type: "AWS::CloudFront::Distribution"
       Properties:
@@ -78,8 +94,12 @@ resources:
               Cookies:
                 Forward: "none"
           DefaultRootObject: "index.html"
+          Logging:
+            IncludeCookies: "false"
+            Bucket: !GetAtt CloudFrontLogsBucket.DomainName
+            Prefix: "${self:custom.objectPrefix}"
           Enabled: true
-          PriceClass: "PriceClass_100"
+          PriceClass: "PriceClass_All"
           HttpVersion: "http2"
           ViewerCertificate:
             CloudFrontDefaultCertificate: true
@@ -92,6 +112,7 @@ resources:
                     - ""
                     - - "origin-access-identity/cloudfront/"
                       - Ref: "CloudFrontOriginAccessIdentity"
+      DependsOn: CloudFrontLogsBucket
 
     CloudFrontOriginAccessIdentity:
       Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
@@ -116,3 +137,29 @@ resources:
                     - "/*"
               Principal:
                 CanonicalUser: !GetAtt CloudFrontOriginAccessIdentity.S3CanonicalUserId
+
+  Outputs:
+    ServicePrefix:
+      Value: "${self:custom.objectPrefix}"
+      Export:
+        Name: "${self:custom.objectPrefix}-ServicePrefix"
+    CloudFrontDistributionDomainName:
+      Value:
+        "Fn::GetAtt": [WebsiteDistribution, DomainName]
+      Export:
+        Name: "${self:custom.objectPrefix}-CloudFrontDistributionDomainName"
+    CloudFrontDistributionId:
+      Value:
+        Ref: WebsiteDistribution
+      Export:
+        Name: "${self:custom.objectPrefix}-CloudFrontDistributionId"
+    WebsiteBucketName:
+      Value:
+        Ref: WebsiteBucket
+      Export:
+        Name: "${self:custom.objectPrefix}-WebsiteBucketName"
+    UsersSecretName:
+      Value:
+        Ref: UsersSecret
+      Export:
+        Name: "${self:custom.objectPrefix}-UsersSecretName"

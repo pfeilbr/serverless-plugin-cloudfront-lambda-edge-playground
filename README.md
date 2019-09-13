@@ -173,3 +173,8 @@ see [Determining the Lambda@Edge Region](https://docs.aws.amazon.com/AmazonCloud
 * update `serverless.yml:iamRoleStatements` with dynamic region, account id, and secretsmanager name
     * via [serverless-pseudo-parameters](https://github.com/svdgraaf/serverless-pseudo-parameters#readme) plugin
 
+## Scratch
+
+```
+$(node ./scripts/get-stack-property.js )
+```

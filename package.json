@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "sls": "sls --",
     "deploy": "npm run deploy-infrastructure && npm run build-and-deploy-static-site",
     "deploy-infrastructure": "sls deploy",
     "build-and-deploy-static-site": "npm run build-static-site && npm run publish-static-assets-to-bucket && npm run cloudfront:invalidate",
     "build-static-site": "pushd static-site && npm run build && popd",
-    "publish-static-assets-to-bucket": "aws s3 cp static-site/public s3://pfeil-static-site-dev/ --recursive",
-    "cloudfront:invalidate": "aws cloudfront create-invalidation --distribution-id E1ZQSLID3J234M --paths \"/*\""
+    "publish-static-assets-to-bucket": "aws s3 cp static-site/public s3://$(node scripts/get-stack-property.js WebsiteBucketName)/ --recursive",
+    "cloudfront:invalidate": "aws cloudfront create-invalidation --distribution-id $(node scripts/get-stack-property.js CloudFrontDistributionId) --paths \"/*\""
   },
   "keywords": [],
   "author": "",
@@ -21,6 +22,8 @@
   },
   "dependencies": {
     "aws-sdk": "^2.526.0",
-    "serverless-pseudo-parameters": "^2.4.0"
+    "serverless-plugin-scripts": "^1.0.2",
+    "serverless-pseudo-parameters": "^2.4.0",
+    "serverless-stack-output": "^0.2.3"
   }
 }
